@@ -1,0 +1,13 @@
+.App {
+  text-align: center;
+}
+
+.wordToFind {
+  letter-spacing: 5px;
+  word-spacing: 10px;
+}
+
+.alphabet {
+  display: flexbox;
+  justify-content: space-around;
+}
