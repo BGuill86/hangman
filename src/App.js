@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
+import hangman from './hangman.png'
 
-import Letter from './Letter'
-
-const words = ['rhinocéros laineux','ours blanc', 'panthère des neiges']
+const words = [
+  'ornithorynque',
+  'globicephale',
+  'rhinoceros',
+  'orycterope',
+  'dugong',
+  'tamanoir',
+  'requin',
+  'capybara',
+  'lycaon',
+  'gavial',
+  'phacochere',
+  'hippopotame'
+]
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 class App extends Component {
@@ -16,13 +28,9 @@ class App extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.initGame()
   }
-
-  // componentDidUpdate(){
-  //   console.log(this.state)
-  // }
 
   initGame = () => {
     const solution = words[Math.floor(Math.random() * words.length)]
@@ -46,60 +54,62 @@ class App extends Component {
       this.setState({
         wrongClickedLetters: wrongClickedLetters
       })
-      if (wrongClickedLetters.length === 10) {
-        alert('game over !')         
-      }
     }
   }
 
-  showFirstLetters = () => {
-    const { solution, wordToFind } = this.state
-    this.setState({
-      wordToFind: [...wordToFind].map((letter, index) => {
-        return (index === 0 || wordToFind[index-1] === ' ') ? solution[index] : wordToFind[index]
-      }).join('')
-    })    
-  }
-
-  showSolution = () => {
-    this.setState({
-      wordToFind: this.state.solution
-    })
-  }
-
   render() {
-    const { wordToFind, wrongClickedLetters } = this.state
+    const { wordToFind, solution, wrongClickedLetters } = this.state
+
+    const limit = solution.length 
+    const gameOver = wrongClickedLetters.length === limit
+    const success = [...wordToFind].join('') === solution
+
     const clickLetters = [...alphabet].map((letter, index) => {
       let clicked = 'unclicked'
       if (wordToFind && wordToFind.includes(letter)) { clicked = 'correct' }
       if (wrongClickedLetters && wrongClickedLetters.includes(letter)) { clicked = 'wrong' }
       return (
-        <Letter
-          clickLetter={this.clickLetter}
-          clicked={clicked}
-          letter={letter}
+        <span
+          className={`letter ${clicked}`}
+          onClick={this.clickLetter}
           key={index}
-        />
+	      >
+	      {letter}
+	    </span>
       )
     })
     return (
       <div className="App">
         <header>
-          {'Welcome to the Hangman...'}
+          <h1>
+            <img src={hangman} alt='Pendu' /> 
+          </h1>
         </header>
-        <div className="wordToFind">{wordToFind}</div>
-        <div className="alphabet">
-          {clickLetters}
-        </div>
         {
-          wrongClickedLetters 
-          &&  <div className="wrongClickedLetters">
-                Erreurs : {wrongClickedLetters.length}/10
-              </div>
+          !gameOver && !success
+          && <section className="game">
+            <div className="wordToFind">{wordToFind}</div>
+            <div className="alphabet">
+                {clickLetters}
+            </div>
+            <div className="wrongClickedLetters">
+              Erreurs permises : {wrongClickedLetters.length}/{limit}
+            </div>
+          </section>
         }
-        <button onClick={this.showFirstLetters}>Help</button>
-        <button onClick={this.showSolution}>Solution</button>
-        <button onClick={this.initGame}>Restart</button>
+        {
+          gameOver
+          && <section className="failure">
+            Dommage... nouvel essai ?
+          </section>
+        }
+        {
+          success 
+          && <section className="success">
+            Bravo, vous avez trouvé "{wordToFind}" !
+          </section>
+        }
+        { (gameOver || success) && <button className="restart-btn" onClick={this.initGame}>Commencer une autre partie</button> }
       </div>
     );
   }
