@@ -2,12 +2,33 @@
   text-align: center;
 }
 
+.game {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .wordToFind {
-  letter-spacing: 5px;
-  word-spacing: 10px;
+  letter-spacing: 10px;
+  display: block;
+  margin: 25px 0;
+  font-size: 2rem;
 }
 
 .alphabet {
   display: flexbox;
   justify-content: space-around;
+  margin: 25px;
+  font-size: 2rem;
+  width: 600px;
+}
+
+.restart-btn {
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background: #3A3A3C;
+  cursor: pointer;
+  padding: 10px;
 }

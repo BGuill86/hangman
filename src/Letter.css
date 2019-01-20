@@ -1,27 +1,38 @@
-.letter{
+.letter {
   display: inline-block;
   text-transform: uppercase;
-  cursor: pointer;  
+  cursor: pointer;
   color: white;
   font-weight: bold;
   width: 25px;
   width: 25px;
+  padding: 0 10px;
 }
 
 .letter.unclicked {
-  background: grey;
+  background: lightgrey;
 }
 
 .letter.unclicked:hover {
   opacity: 0.5;
 }
 
-.letter.correct {  
+.letter.correct {
   background: green;
   pointer-events: none;
 }
 
-.letter.wrong {  
+.letter.wrong {
   background: red;
   pointer-events: none;
 }
+
+.success,
+.failure {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 25px 0;
+}
+
+.success { color:green; }
+.failure { color:red; }
