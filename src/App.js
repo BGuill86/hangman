@@ -3,20 +3,6 @@ import './App.css';
 import hangman from './hangman.png'
 var animals = require('animals');
 
-// const words = [
-//   'ornithorynque',
-//   'globicephale',
-//   'rhinoceros',
-//   'orycterope',
-//   'dugong',
-//   'tamanoir',
-//   'requin',
-//   'capybara',
-//   'lycaon',
-//   'gavial',
-//   'phacochere',
-//   'hippopotame'
-// ]
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 class App extends Component {
@@ -39,6 +25,7 @@ class App extends Component {
   }
 
   escFunction = e => {
+    if (!(e.keyCode >= 65 && e.keyCode <= 90)) return
     const letter = String.fromCharCode(e.keyCode).toLowerCase()
     this.tryLetter(letter)
   }
@@ -59,6 +46,7 @@ class App extends Component {
 
   tryLetter = letter => {
     const { solution, wordToFind, wrongClickedLetters } = this.state
+    if (wrongClickedLetters.includes(letter)) return
     if (solution.includes(letter)) {
       const solutionInProgress = [...solution].map((l, i) => l === letter ? l : wordToFind[i])
       this.setState({
@@ -76,7 +64,7 @@ class App extends Component {
     const { wordToFind, solution, wrongClickedLetters } = this.state
 
     const limit = solution.length 
-    const gameOver = wrongClickedLetters.length === limit
+    const gameOver = wrongClickedLetters.length >= limit
     const success = [...wordToFind].join('') === solution
 
     const clickLetters = [...alphabet].map((letter, index) => {
@@ -115,16 +103,17 @@ class App extends Component {
         {
           gameOver
           && <section className="failure">
-            Dommage... nouvel essai ?
+            Dommage, la solution était "{solution}"...nouvel essai ?
           </section>
         }
         {
           success 
           && <section className="success">
-            Bravo, vous avez trouvé "{wordToFind}" !
+            Bravo, vous avez trouvé "{solution}" !
           </section>
         }
-        { (gameOver || success) && <button className="restart-btn" onClick={this.initGame}>Commencer une autre partie</button> }
+        { (gameOver || success) && 
+          <button className="restart-btn" autoFocus onClick={this.initGame}>Commencer une autre partie</button> }
       </div>
     );
   }
