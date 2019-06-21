@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import './App.css';
 import hangman from './hangman.png'
+var animals = require('animals');
 
-const words = [
-  'ornithorynque',
-  'globicephale',
-  'rhinoceros',
-  'orycterope',
-  'dugong',
-  'tamanoir',
-  'requin',
-  'capybara',
-  'lycaon',
-  'gavial',
-  'phacochere',
-  'hippopotame'
-]
+// const words = [
+//   'ornithorynque',
+//   'globicephale',
+//   'rhinoceros',
+//   'orycterope',
+//   'dugong',
+//   'tamanoir',
+//   'requin',
+//   'capybara',
+//   'lycaon',
+//   'gavial',
+//   'phacochere',
+//   'hippopotame'
+// ]
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 class App extends Component {
@@ -30,10 +31,20 @@ class App extends Component {
 
   componentDidMount() {
     this.initGame()
+    document.addEventListener("keydown", this.escFunction, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.escFunction, false);
+  }
+
+  escFunction = e => {
+    const letter = String.fromCharCode(e.keyCode).toLowerCase()
+    this.tryLetter(letter)
   }
 
   initGame = () => {
-    const solution = words[Math.floor(Math.random() * words.length)]
+    const solution = animals()
     this.setState({
       wrongClickedLetters: [],
       solution: solution,
@@ -43,6 +54,10 @@ class App extends Component {
 
   clickLetter = e => {
     const letter = e.target.innerText.toLowerCase()
+    this.tryLetter(letter)
+  }
+
+  tryLetter = letter => {
     const { solution, wordToFind, wrongClickedLetters } = this.state
     if (solution.includes(letter)) {
       const solutionInProgress = [...solution].map((l, i) => l === letter ? l : wordToFind[i])
